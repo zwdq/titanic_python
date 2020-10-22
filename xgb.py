@@ -14,7 +14,7 @@ submission_name = "./submission/xgb_submisson.csv" #输出的预测文件名及�
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
     model = XGBClassifier(
-        learning_rate=0.01,      # 学习速率
+        learning_rate=0.1,     # 学习速率
         reg_alpha=1,            # l1正则权重
         n_estimators=1000,      # 树的个数 --n棵树建立xgboost
         max_depth=5,            # 树的深度
