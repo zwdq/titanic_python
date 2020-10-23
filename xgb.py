@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import joblib
 #导入自己的api.py,里面共有两个方法datachange和datachange2，用于特征工程
-import api
+from api import api
 
 #设置
 model_m_name = "./train_model/xgb_train_model.m" #产生的模型名及路径
@@ -26,13 +26,13 @@ def modeltrain(xdata,ydata):
         objective='binary:logistic',  # 损失函数 objective='multi:softmax' 'binary:logistic' reg:linear
         )
     #切分训练集
-    features_train,features_test,predict_train,predict_test = train_test_split(xdata,ydata,test_size=0.3)
+    training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=42)
     #fit
-    model = model.fit(features_train,predict_train)
+    model = model.fit(training_features,training_target)
     #预测
-    y_predict = model.predict(features_test)
+    y_predict = model.predict(testing_features)
     #算准确率
-    acc = metrics.accuracy_score(predict_test,y_predict)
+    acc = metrics.accuracy_score(testing_target,y_predict)
     #打印准确率
     print("准确率是:")
     print(acc)

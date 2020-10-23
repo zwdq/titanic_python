@@ -14,7 +14,7 @@ submission_name = "./submission/logistic_submisson.csv"
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
     model = LogisticRegression(max_iter=500000)
-        #切分训练集
+    #切分训练集
     features_train,features_test,predict_train,predict_test = train_test_split(xdata,ydata,test_size=0.3)
     #fit
     model = model.fit(features_train,predict_train)
