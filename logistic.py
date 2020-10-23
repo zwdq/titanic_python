@@ -14,14 +14,14 @@ submission_name = "./submission/logistic_submisson.csv"
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
     model = LogisticRegression(max_iter=500000)
-    #切分训练集
-    X_train,X_test,y_train,y_test = train_test_split(xdata,ydata,test_size=0.6)
+        #切分训练集
+    features_train,features_test,predict_train,predict_test = train_test_split(xdata,ydata,test_size=0.3)
     #fit
-    model = model.fit(X_train,y_train)
+    model = model.fit(features_train,predict_train)
     #预测
-    y_predict = model.predict(X_test)
+    y_predict = model.predict(features_test)
     #算准确率
-    acc = metrics.accuracy_score(y_test,y_predict)
+    acc = metrics.accuracy_score(predict_test,y_predict)
     #打印准确率
     print("准确率是:")
     print(acc)

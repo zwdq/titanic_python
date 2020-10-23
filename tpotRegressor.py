@@ -1,5 +1,5 @@
 import pandas as pd
-from tpot import TPOTRegressor
+from tpot import TPOTClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import joblib
@@ -7,26 +7,28 @@ import joblib
 import api
 
 #设置
-model_m_name = "./train_model/tpot_train_model.m" #产生的模型名及路径
+#model_m_name = "./train_model/tpot_train_model.m" #产生的模型名及路径
+model_m_name = "./train_model/tpot_train_model.py" #产生的模型名及路径
 submission_name = "./submission/tpot_submisson.csv" #输出的预测文件名及路径
 
 
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
-    model = TPOTRegressor()
+    model = TPOTClassifier(generations=1,population_size=5,verbosity=2)
     #切分训练集
-    X_train,X_test,y_train,y_test = train_test_split(xdata,ydata,test_size=0.5)
+    features_train,features_test,predict_train,predict_test = train_test_split(xdata,ydata,test_size=0.3,random_state=42)
     #fit
-    model = model.fit(X_train,y_train)
+    model = model.fit(features_train,predict_train)
     #预测
-    y_predict = model.predict(X_test)
+    y_predict = model.predict(features_test)
     #算准确率
-    acc = metrics.accuracy_score(y_test,y_predict)
+    acc = metrics.accuracy_score(predict_test,y_predict)
     #打印准确率
     print("准确率是:")
     print(acc)
     #保存模型
-    joblib.dump(model, model_m_name)
+    #joblib.dump(model, model_m_name)
+    model.export(model_m_name)
     return model
 
 def modelout(model):
@@ -54,3 +56,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
