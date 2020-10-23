@@ -4,7 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import joblib
 #导入自己的api.py,里面共有两个方法api.datachange和api.datachange2，用于特征工程
-import api
+from api import api
 
 #设置
 model_m_name = "./train_model/logistc_train_model.m" #产生的模型名及路径

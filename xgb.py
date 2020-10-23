@@ -26,13 +26,13 @@ def modeltrain(xdata,ydata):
         objective='binary:logistic',  # 损失函数 objective='multi:softmax' 'binary:logistic' reg:linear
         )
     #切分训练集
-    training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=42)
+    training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=27)
     #fit
     model = model.fit(training_features,training_target)
     #预测
-    y_predict = model.predict(testing_features)
+    predict_target = model.predict(testing_features)
     #算准确率
-    acc = metrics.accuracy_score(testing_target,y_predict)
+    acc = metrics.accuracy_score(testing_target,predict_target)
     #打印准确率
     print("准确率是:")
     print(acc)
