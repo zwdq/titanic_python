@@ -7,6 +7,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import PolynomialFeatures
+from tpot.builtins import StackingEstimator
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.feature_selection import SelectFwe, f_classif
 #导入自己的api.py,里面共有两个方法datachange和datachange2，用于特征工程
 from api import api
 
@@ -17,7 +20,16 @@ submission_name = "./submission/random_submisson.csv" #输出的预测文件名�
 
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
-    model = ExtraTreesClassifier(bootstrap=True, criterion="gini", max_features=0.05, min_samples_leaf=1, min_samples_split=11, n_estimators=100)
+    '''
+    model = make_pipeline(
+    PolynomialFeatures(degree=2, include_bias=False, interaction_only=False),
+    StackingEstimator(estimator=DecisionTreeClassifier(criterion="gini", max_depth=1, min_samples_leaf=19, min_samples_split=11)),
+    SelectFwe(score_func=f_classif, alpha=0.004),
+    RandomForestClassifier(bootstrap=False, criterion="gini", max_features=0.25, min_samples_leaf=1, min_samples_split=18, n_estimators=100)
+)
+    '''
+    #下面这个是kaggle kernel上跑出来的，效果看起来不错，提交后acc0.787
+    model = RandomForestClassifier(bootstrap=True, criterion="gini", max_features=0.4, min_samples_leaf=4, min_samples_split=16, n_estimators=100)
     #切分训练集
     training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.25,random_state=None)
     #fit
