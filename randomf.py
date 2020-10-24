@@ -4,6 +4,7 @@ from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import joblib
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import PolynomialFeatures
 #导入自己的api.py,里面共有两个方法datachange和datachange2，用于特征工程
@@ -16,12 +17,9 @@ submission_name = "./submission/random_submisson.csv" #输出的预测文件名�
 
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
-    model = make_pipeline(
-    PolynomialFeatures(degree=2, include_bias=False, interaction_only=False),
-    RandomForestClassifier(bootstrap=True, criterion="entropy", max_features=0.8500000000000001, min_samples_leaf=11, min_samples_split=3, n_estimators=100)
-)
+    model = ExtraTreesClassifier(bootstrap=True, criterion="gini", max_features=0.05, min_samples_leaf=1, min_samples_split=11, n_estimators=100)
     #切分训练集
-    training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=None)
+    training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.25,random_state=None)
     #fit
     model = model.fit(training_features,training_target)
     #预测

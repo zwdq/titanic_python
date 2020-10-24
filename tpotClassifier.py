@@ -15,9 +15,9 @@ submission_name = "./submission/tpot_submisson.csv" #输出的预测文件名及
 
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
-    model = TPOTClassifier(generations=1000,population_size=30,verbosity=2)
+    model = TPOTClassifier(generations=100,population_size=100,verbosity=2)
     #切分训练集
-    training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3)
+    training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.15)
     #fit
     model = model.fit(training_features,training_target)
     #预测

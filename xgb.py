@@ -24,6 +24,7 @@ def modeltrain(xdata,ydata):
         gamma=0.1, 
         random_state=20,        # 随机数
         objective='binary:logistic',  # 损失函数 objective='multi:softmax' 'binary:logistic' reg:linear
+        #wram_start=True,
         )
     #切分训练集
     training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=27)

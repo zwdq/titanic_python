@@ -15,7 +15,8 @@ def datachange(data_load):
     data_load.loc[data_load['Embarked'] == "Q", 'Embarked'] = 2
 
     #用前面的数据替换剩下数据的缺失值
-    #data_load = data_load.fillna(method='ffill')
+    data_load = data_load.fillna(method='ffill')
+    data_load = data_load.dropna()
     #把姓名标签换成姓名长度
     data_load["Name"] = data_load["Name"].map(lambda x:len(x))
     
