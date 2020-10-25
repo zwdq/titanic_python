@@ -32,7 +32,7 @@ def modeltrain(xdata,ydata):
              metrics=['acc'],
              ) #metrics输出正确率，它是一个列表
     #fit
-    history = model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=1000,verbose=2)
+    model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=1000,verbose=2)
     #预测
     #result = model.evaluate(testing_features,testing_target)
     predict_target = (model.predict(testing_features) > 0.5).astype("int32")
