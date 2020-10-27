@@ -26,7 +26,7 @@ def datachange(data_load):
     del data_load["Ticket"]
     del data_load["Cabin"]
     #观看一下特征工程处理后的csv
-    data_load.to_csv("./api_data.csv")
+    #data_load.to_csv("./api_data.csv")
     return data_load
 
 #获取y标签，同时把data_load从pd换成数组
