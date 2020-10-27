@@ -56,7 +56,9 @@ def modelout(model):
 def main():
     #读取数据
     data_load = pd.read_csv("./data_download/train.csv")
+    #特征工程第一步
     data_load = api.datachange(data_load)
+    #第二步，把x和y的数组分别取出来，做modeltrain函数的参数，输出模型
     xdata,ydata = api.datachange2(data_load)
     model = modeltrain(xdata,ydata)
     modelout(model)
