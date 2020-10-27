@@ -8,8 +8,8 @@ import joblib
 from api import api
 
 #设置
-model_m_name = "./train_model/my_model.h5" #产生的模型名及路径
-submission_name = "./submission/tensor__submisson.csv" #输出的预测文件名及路径
+model_m_name = "./train_model/tensor_model.h5" #产生的模型名及路径
+submission_name = "./submission/tensor_submisson.csv" #输出的预测文件名及路径
 
 def modeltrain(xdata,ydata):
     #切分训练集为训练集和测试集

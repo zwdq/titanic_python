@@ -48,7 +48,7 @@ def modelout(model):
     #预测值的输出，并转化为df，并加上列名
     Survived = pd.DataFrame(model.predict(data_load))
     Survived.columns = ["Survived"]
-    #df横向连接，输出为csv，不要标签
+    #df横向连接，输出为csv，不要标签，输出在submission里，只有id和输出值两列
     pd.concat([PassengerId,Survived],axis = 1).to_csv(submission_name,index = 0)
     return
     
