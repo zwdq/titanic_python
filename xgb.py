@@ -17,15 +17,17 @@ def modeltrain(xdata,ydata,n_numbers,lr):
     #调用sklearn逻辑回归api
     model = XGBClassifier(
         learning_rate=lr,       # 学习速率
-        reg_alpha=1,            # l1正则权重
+        #reg_alpha=1,            # l1正则权重
         n_estimators=n_numbers, # 树的个数 --n棵树建立xgboost
-        max_depth=5,            # 树的深度
-        subsample=0.9,          # 随机选择x%样本建立决策树，小了欠拟合，大了过拟合
-        colsample_bytree = 0.9, # x%特征建立决策树
-        scale_pos_weight=1,     # 解决样本个数不平衡的问题
-        gamma=0.1, 
-        random_state=20,        # 随机数
-        objective='binary:logistic',  # 损失函数 objective='multi:softmax' 'binary:logistic' reg:linear
+        max_depth=6,            # 树的深度
+        min_child_weight=2,
+        nthread=1,
+        subsample=0.85,          # 随机选择x%样本建立决策树，小了欠拟合，大了过拟合
+        #colsample_bytree = 0.9, # x%特征建立决策树
+        #scale_pos_weight=1,     # 解决样本个数不平衡的问题
+        #gamma=0.1, 
+        #random_state=20,        # 随机数
+        #objective='binary:logistic',  # 损失函数 objective='multi:softmax' 'binary:logistic' reg:linear
         #wram_start=True,
         )
     #切分训练集
@@ -93,8 +95,8 @@ if __name__ == "__main__":
     e2.grid(row=1, column=1, padx=10, pady=5)
     e3.grid(row=2, column=1, padx=10, pady=5)
     e4.grid(row=3, column=1, padx=10, pady=5)
-    e1.insert(0, "0.01")
-    e2.insert(0, "2000")
+    e1.insert(0, "0.1")
+    e2.insert(0, "100")
     e3.insert(0, "暂无 ")
     e4.insert(0, "暂无 ")
     
@@ -106,9 +108,9 @@ if __name__ == "__main__":
         main(n_numbers,lr)
         #tkinter.messagebox.showinfo("auc曲线结果是",auc,parent=window)
         e3.delete(0, "end")
-        e3.insert(0, round(auc,4))
+        e3.insert(0, round(auc,3))
         e4.delete(0, "end")
-        e4.insert(0, round(acc,4))
+        e4.insert(0, round(acc,3))
         #e1.delete(0, "end")
         #e2.delete(0, "end")
 

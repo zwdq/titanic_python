@@ -5,7 +5,7 @@ from sklearn import metrics
 import joblib
 #导入自己的api2.py,里面共有两个方法datachange和datachange2，用于特征工程
 #api2处理原数据较少，删除缺失值，自动特征工程
-from api import api as api
+from api import data_utils
 
 #设置
 #model_m_name = "./train_model/tpot_train_model.m" #产生的模型名及路径
@@ -15,7 +15,7 @@ submission_name = "./submission/tpot_submisson.csv" #输出的预测文件名及
 
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
-    model = TPOTClassifier(generations=100,population_size=100,verbosity=2)
+    model = TPOTClassifier(generations=10,population_size=10,verbosity=2)
     #切分训练集
     training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.15)
     #fit
@@ -46,7 +46,9 @@ def modelout(model):
     
 def main():
     #读取数据
-    data_load = pd.read_csv("./data_download/train.csv")    
+    data_load = pd.read_csv("./data_download/train.csv") 
+    global api   
+    api = data_utils.data_utils_method()
     data_load = api.datachange(data_load)
     xdata,ydata = api.datachange2(data_load)
     model = modeltrain(xdata,ydata)
