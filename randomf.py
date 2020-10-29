@@ -38,6 +38,11 @@ def modeltrain(xdata,ydata):
     predict_target = model.predict(testing_features)
     #算准确率
     acc = metrics.accuracy_score(testing_target,predict_target)
+    #算auc
+    auc = metrics.roc_auc_score(testing_target,predict_target)#验证集上的auc值
+    #打印auc
+    print("auc值是:")
+    print(auc)
     #打印准确率
     print("准确率是:")
     print(acc)

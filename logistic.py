@@ -22,6 +22,9 @@ def modeltrain(xdata,ydata):
     y_predict = model.predict(features_test)
     #算准确率
     acc = metrics.accuracy_score(predict_test,y_predict)
+    #打印系数
+    print("各项系数:")
+    print(model.coef_)
     #打印准确率
     print("准确率是:")
     print(acc)
