@@ -1,6 +1,7 @@
 import pandas as pd
 from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
 import joblib
 import tkinter
@@ -30,6 +31,9 @@ def modeltrain(xdata,ydata,n_numbers,lr):
         #objective='binary:logistic',  # 损失函数 objective='multi:softmax' 'binary:logistic' reg:linear
         #wram_start=True,
         )
+    #切分前标准化
+    sc = StandardScaler()
+    xdata = sc.fit_transform(xdata)
     #切分训练集
     training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=25)
     #fit
@@ -73,6 +77,10 @@ def main(n_numbers,lr):
     data_load = method.datachange(data_load)
     #第二步，把x和y的数组分别取出来，做modeltrain函数的参数，输出模型
     xdata,ydata = method.datachange2(data_load)
+    #切分前标准化
+    sc = StandardScaler()
+    xdata = sc.fit_transform(xdata)
+    
     model = modeltrain(xdata,ydata,n_numbers,lr)
     modelout(model)
     print("模型已处理完毕")

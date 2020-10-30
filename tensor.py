@@ -1,17 +1,26 @@
 ###
 import pandas as pd
+import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
+from sklearn.preprocessing import StandardScaler
+from sklearn.impute import SimpleImputer
 import joblib
 #导入自己的api.py,里面共有两个方法datachange和datachange2，用于特征工程
-from api import api
+from api import data_utils
 
 #设置
 model_m_name = "./train_model/tensor_model.h5" #产生的模型名及路径
 submission_name = "./submission/tensor_submisson.csv" #输出的预测文件名及路径
 
 def modeltrain(xdata,ydata):
+    #切分前填充均值
+    #si = SimpleImputer(missing_values=np.nan,strategy="mean")
+    #xdata = si.fit_transform(xdata)
+    #切分前标准化
+    sc = StandardScaler()
+    xdata = sc.fit_transform(xdata)
     #切分训练集为训练集和测试集
     training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=27)
     #再次切分训练集为训练集和验证集用于建模；这样，总共有三组样本：训练集，验证集和测试集
@@ -24,15 +33,17 @@ def modeltrain(xdata,ydata):
         tf.keras.layers.Dense(8, activation='relu'),
         tf.keras.layers.Dense(8, activation='sigmoid'),
         tf.keras.layers.Dense(8, activation='relu'),
+        tf.keras.layers.Dropout(0.5),
         tf.keras.layers.Dense(1, activation='sigmoid'),
+        #tf.keras.layers.Dropout(0.5),
     ])
     #keras的compile方法，定义损失函数、优化器和指标等
     model.compile(optimizer='adam',
              loss='binary_crossentropy',
-             metrics=['acc'],
+             metrics=[tf.keras.metrics.AUC()],
              ) #metrics输出正确率，它是一个列表
     #fit
-    model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=1000,verbose=2)
+    model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=10,verbose=2)
     #预测
     #result = model.evaluate(testing_features,testing_target)
     predict_target = (model.predict(testing_features) > 0.5).astype("int32")
@@ -62,6 +73,8 @@ def modelout(model):
 def main():
     #读取数据
     data_load = pd.read_csv("./data_download/train.csv")
+    global api
+    api = data_utils.data_utils_method()
     data_load = api.datachange(data_load)
     xdata,ydata = api.datachange2(data_load)
     model = modeltrain(xdata,ydata)
