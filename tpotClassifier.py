@@ -35,9 +35,9 @@ def modeltrain(xdata,ydata):
 def modelout(model):
     data_load = pd.read_csv("./data_download/test.csv")
     PassengerId = pd.DataFrame(data_load["PassengerId"])
-    data_load = api.datachange(data_load).values
+    xdata,ydata = api.datachange(data_load)
     #预测值的输出，并转化为df，并加上列名
-    Survived = pd.DataFrame(model.predict(data_load))
+    Survived = pd.DataFrame(model.predict(xdata))
     Survived.columns = ["Survived"]
     #df横向连接，输出为csv，不要标签
     pd.concat([PassengerId,Survived],axis = 1).to_csv(submission_name,index = 0)
@@ -49,8 +49,7 @@ def main():
     data_load = pd.read_csv("./data_download/train.csv") 
     global api   
     api = data_utils.data_utils_method()
-    data_load = api.datachange(data_load)
-    xdata,ydata = api.datachange2(data_load)
+    xdata,ydata = api.datachange(data_load)
     model = modeltrain(xdata,ydata)
     modelout(model)
     print("模型已处理完毕")

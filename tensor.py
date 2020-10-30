@@ -15,12 +15,7 @@ model_m_name = "./train_model/tensor_model.h5" #产生的模型名及路径
 submission_name = "./submission/tensor_submisson.csv" #输出的预测文件名及路径
 
 def modeltrain(xdata,ydata):
-    #切分前填充均值
-    #si = SimpleImputer(missing_values=np.nan,strategy="mean")
-    #xdata = si.fit_transform(xdata)
-    #切分前标准化
-    sc = StandardScaler()
-    xdata = sc.fit_transform(xdata)
+   
     #切分训练集为训练集和测试集
     training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3,random_state=27)
     #再次切分训练集为训练集和验证集用于建模；这样，总共有三组样本：训练集，验证集和测试集
@@ -28,10 +23,12 @@ def modeltrain(xdata,ydata):
     training_features,validation_features,training_target,validation_target = train_test_split(training_features,training_target)
     #tensorflow2.0的神经网络
     model = tf.keras.models.Sequential([
-        tf.keras.layers.Dense(8,input_shape=(8, ), activation='relu'),
+        tf.keras.layers.Dense(8,input_shape=(7, ), activation='relu'),
         tf.keras.layers.Dense(8, activation='sigmoid'),
+        tf.keras.layers.Dropout(0.5),
         tf.keras.layers.Dense(8, activation='relu'),
         tf.keras.layers.Dense(8, activation='sigmoid'),
+        tf.keras.layers.Dropout(0.5),
         tf.keras.layers.Dense(8, activation='relu'),
         tf.keras.layers.Dropout(0.5),
         tf.keras.layers.Dense(1, activation='sigmoid'),
@@ -43,17 +40,13 @@ def modeltrain(xdata,ydata):
              metrics=[tf.keras.metrics.AUC()],
              ) #metrics输出正确率，它是一个列表
     #fit
-    model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=10,verbose=2)
-    #预测
-    #result = model.evaluate(testing_features,testing_target)
+    model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=1000,verbose=2)
     predict_target = (model.predict(testing_features) > 0.5).astype("int32")
     #算准确率
     acc = metrics.accuracy_score(testing_target,predict_target)
     #打印准确率
     print("测试集准确率是:")
     print(acc)
-    #print("准确率训练集是:")
-    #print(model.evaluate(training_features,training_target))
     #保存模型
     model.save(model_m_name)
     return model
@@ -61,9 +54,9 @@ def modeltrain(xdata,ydata):
 def modelout(model):
     data_load = pd.read_csv("./data_download/test.csv")
     PassengerId = pd.DataFrame(data_load["PassengerId"])
-    data_load = api.datachange(data_load).values
+    xdata,ydata = api.datachange(data_load)
     #预测值的输出，并转化为df，并加上列名
-    Survived = pd.DataFrame((model.predict(data_load) > 0.5).astype("int32"))
+    Survived = pd.DataFrame((model.predict(xdata) > 0.5).astype("int32"))
     Survived.columns = ["Survived"]
     #df横向连接，输出为csv，不要标签
     pd.concat([PassengerId,Survived],axis = 1).to_csv(submission_name,index = 0)
@@ -75,8 +68,7 @@ def main():
     data_load = pd.read_csv("./data_download/train.csv")
     global api
     api = data_utils.data_utils_method()
-    data_load = api.datachange(data_load)
-    xdata,ydata = api.datachange2(data_load)
+    xdata,ydata = api.datachange(data_load)
     model = modeltrain(xdata,ydata)
     modelout(model)
     print("模型已处理完毕")
