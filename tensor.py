@@ -25,10 +25,8 @@ def modeltrain(xdata,ydata):
     model = tf.keras.models.Sequential([
         tf.keras.layers.Dense(8,input_shape=(7, ), activation='relu'),
         tf.keras.layers.Dense(8, activation='sigmoid'),
-        tf.keras.layers.Dropout(0.5),
         tf.keras.layers.Dense(8, activation='relu'),
         tf.keras.layers.Dense(8, activation='sigmoid'),
-        tf.keras.layers.Dropout(0.5),
         tf.keras.layers.Dense(8, activation='relu'),
         tf.keras.layers.Dropout(0.5),
         tf.keras.layers.Dense(1, activation='sigmoid'),

@@ -1,6 +1,8 @@
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import LabelEncoder
 from sklearn.impute import SimpleImputer
 import numpy as np
+import pandas as pd
 
 class data_utils_method():
 
@@ -16,15 +18,14 @@ class data_utils_method():
             del data_load["Survived"]
         else:
             ydata = []
-
+ 
         #把男女标签变成0或1
-        data_load.loc[data_load['Sex'] == "male", 'Sex'] = 1
-        data_load.loc[data_load['Sex'] == "female", 'Sex'] = 0
-        
-        #把登船港口标签变成0，1，2
-        data_load.loc[data_load['Embarked'] == "S", 'Embarked'] = 0
-        data_load.loc[data_load['Embarked'] == "C", 'Embarked'] = 1
-        data_load.loc[data_load['Embarked'] == "Q", 'Embarked'] = 2
+
+        le = LabelEncoder() 
+        data_load.loc[:,'Sex'] = le.fit_transform(data_load['Sex'])
+        data_load.loc[:,'Embarked'] = data_load.loc[:,'Embarked'].apply(lambda x: str(x))
+        data_load.loc[:,'Embarked'] = le.fit_transform(data_load['Embarked'])
+       
 
         #把姓名标签换成姓名长度
         #data_load["Name"] = data_load["Name"].map(lambda x:len(x))
