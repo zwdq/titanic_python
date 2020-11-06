@@ -10,6 +10,7 @@ import joblib
 #导入自己的api.py,里面共有两个方法datachange和datachange2，用于特征工程
 from api import data_utils
 
+
 #设置
 model_m_name = "./train_model/tensor_model.h5" #产生的模型名及路径
 submission_name = "./submission/tensor_submisson.csv" #输出的预测文件名及路径
@@ -38,12 +39,13 @@ def modeltrain(xdata,ydata):
              metrics=[tf.keras.metrics.AUC()],
              ) #metrics输出正确率，它是一个列表
     #fit
-    model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=1000,verbose=2)
+    model.fit(training_features,training_target,validation_data=(validation_features,validation_target),epochs=100,verbose=2)
     predict_target = (model.predict(testing_features) > 0.5).astype("int32")
     #算准确率
     acc = metrics.accuracy_score(testing_target,predict_target)
     #打印准确率
-    print("测试集准确率是:")
+    print("*************************")
+    print(r"the acc of test_data is :")
     print(acc)
     #保存模型
     model.save(model_m_name)
@@ -69,7 +71,8 @@ def main():
     xdata,ydata = api.datachange(data_load)
     model = modeltrain(xdata,ydata)
     modelout(model)
-    print("模型已处理完毕")
+    print(r"Model Finished")
+    print("*************************")
     return
 
 

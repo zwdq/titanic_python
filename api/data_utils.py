@@ -19,18 +19,14 @@ class data_utils_method():
         else:
             ydata = []
  
-        #把男女标签变成0或1
-
+        #LabelEncoder
         le = LabelEncoder() 
-        data_load.loc[:,'Sex'] = le.fit_transform(data_load['Sex'])
-        data_load.loc[:,'Embarked'] = data_load.loc[:,'Embarked'].apply(lambda x: str(x))
-        data_load.loc[:,'Embarked'] = le.fit_transform(data_load['Embarked'])
+        data_load.loc[:,'Sex'] = le.fit_transform(data_load['Sex']) #姓名标签
+        data_load.loc[:,'Embarked'] = data_load.loc[:,'Embarked'].apply(lambda x: str(x))#全转成字符串，不然报错
+        data_load.loc[:,'Embarked'] = le.fit_transform(data_load['Embarked'])#Embarked标签
        
 
-        #把姓名标签换成姓名长度
-        #data_load["Name"] = data_load["Name"].map(lambda x:len(x))
-    
-        #特征工程
+        #删掉不要的
         del data_load["PassengerId"]
         del data_load["Name"]
         del data_load["Ticket"]
@@ -44,7 +40,5 @@ class data_utils_method():
         xdata = sc.fit_transform(xdata)
         
         
-        
-
         return xdata,ydata
 
