@@ -1,3 +1,5 @@
+#coding=utf-8
+#nohup python /root/titanic_python/tpotClassifier.py >log.out 2>&1 &
 import pandas as pd
 from tpot import TPOTClassifier
 from sklearn.model_selection import train_test_split
@@ -15,7 +17,7 @@ submission_name = "./submission/tpot_submisson.csv" #输出的预测文件名及
 
 def modeltrain(xdata,ydata):
     #调用sklearn逻辑回归api
-    model = TPOTClassifier(generations=10,population_size=10,verbosity=2)
+    model = TPOTClassifier(generations=1000,population_size=100,verbosity=2)
     #切分训练集
     training_features,testing_features,training_target,testing_target = train_test_split(xdata,ydata,test_size=0.3)
     #fit
@@ -25,8 +27,10 @@ def modeltrain(xdata,ydata):
     #算准确率
     acc = metrics.accuracy_score(testing_target,predict_traget)
     #打印准确率
-    print("准确率是:")
+    print("################################")
+    print("the accuracy of test is :")
     print(acc)
+    print("################################")
     #保存模型
     #joblib.dump(model, model_m_name)
     model.export(model_m_name)
@@ -52,7 +56,7 @@ def main():
     xdata,ydata = api.datachange(data_load)
     model = modeltrain(xdata,ydata)
     modelout(model)
-    print("模型已处理完毕")
+    print("Finished")
     return
 
 
