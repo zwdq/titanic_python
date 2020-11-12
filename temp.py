@@ -1,2 +1,8 @@
-import tensorflow as tf
-tf.test.is_gpu_available()
+#%%
+date()
+# %%
+import time
+printtime.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) 
+print(a)
+
+# %%
